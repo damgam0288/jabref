@@ -61,7 +61,7 @@ public class SidePane extends VBox {
         updateView();
     }
 
-     private void updateView() {
+     private void updateView() {  // A5 test - maybe this can be used to update the cover image when clicking an entry?
         getChildren().clear();
          for (SidePaneType type : stateManager.getVisibleSidePaneComponents()) {
              SidePaneComponent view = viewModel.getSidePaneComponent(type);

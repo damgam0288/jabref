@@ -30,6 +30,7 @@ import org.jabref.architecture.AllowedToUseClassGetResource;
 import org.jabref.gui.ClipBoardManager;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.DragAndDropDataFormats;
+import org.jabref.gui.JabRefGUI;
 import org.jabref.gui.LibraryTab;
 import org.jabref.gui.LibraryTabContainer;
 import org.jabref.gui.StateManager;
@@ -133,6 +134,14 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
 
         new ViewModelTableRowFactory<BibEntryTableViewModel>()
                 .withOnMouseClickedEvent((entry, event) -> {        // A5 test
+                    if (event.getClickCount() == 1) {
+                        // A5 test - with stateManager.getSelectedEntries.addListener
+                        // you could add a listener to update the visibleSidePanes whenever
+                        // the selectedEntries change
+                        BibEntry selectedEntry = (stateManager.getSelectedEntries().getFirst());
+
+
+                    }
                     if (event.getClickCount() == 2) {
                         libraryTab.showAndEdit(entry.getEntry());
                     }
