@@ -1,5 +1,6 @@
 package org.jabref.model.entry;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.scene.image.Image;
 
 import org.jabref.architecture.AllowedToUseLogic;
 import org.jabref.logic.bibtex.FileFieldWriter;
@@ -50,6 +52,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.EventBus;
 import com.tobiasdiez.easybind.EasyBind;
 import com.tobiasdiez.easybind.optional.OptionalBinding;
+import org.apache.pdfbox.util.filetypedetector.FileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,11 +161,31 @@ public class BibEntry implements Cloneable {
         this.id = IdGenerator.next();
         setType(type);
         this.sharedBibEntryData = new SharedBibEntryData();
+        this.addGenericFile();      // A5 test
     }
 
     public BibEntry(EntryType type, String citationKey) {
         this(type);
         this.setCitationKey(citationKey);
+    }
+
+    // A5 test
+    private void addGenericFile() {
+        String path = "C:\\Users\\Damian\\Documents\\COMP2120\\A5\\JabRef resources";
+
+        this.addFile(new LinkedFile("coverimage", path + "\\cover.bmp", "bmp"));
+        this.addFile(new LinkedFile("coverimagee", path + "\\random_image.bmp", "bmp"));
+        this.addFile(new LinkedFile("a good pdf", path + "\\some_file.pdf", "pdf"));
+    }
+
+    // A5 test
+    public Image getCoverImage() {
+        for (LinkedFile file : this.getFiles()) {
+            if (file.getDescription().equalsIgnoreCase("coverimage")) {
+                return new Image("file:///"+file.getLink());
+            }
+        }
+        return null;
     }
 
     public Optional<FieldChange> setMonth(Month parsedMonth) {

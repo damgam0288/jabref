@@ -3,6 +3,7 @@ package org.jabref.gui.sidepane;
 import javax.swing.undo.UndoManager;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 
 import org.jabref.gui.ClipBoardManager;
 import org.jabref.gui.DialogService;
@@ -84,6 +85,8 @@ public class SidePaneContentFactory {
                     preferences,
                     dialogService,
                     stateManager);
+            // Todo A5 test - consider adding an enum for "cover pane" and put it here?
+            case COVER_IMAGE -> new Label("This is a blue label");
         };
     }
 }

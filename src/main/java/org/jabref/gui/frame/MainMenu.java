@@ -316,10 +316,13 @@ public class MainMenu extends MenuBar {
         SidePaneType webSearchPane = SidePaneType.WEB_SEARCH;
         SidePaneType groupsPane = SidePaneType.GROUPS;
         SidePaneType openOfficePane = SidePaneType.OPEN_OFFICE;
+        SidePaneType coverImagePane = SidePaneType.COVER_IMAGE; // A5 test
+
         view.getItems().addAll(
                 factory.createCheckMenuItem(webSearchPane.getToggleAction(), sidePane.getToggleCommandFor(webSearchPane), sidePane.paneVisibleBinding(webSearchPane)),
                 factory.createCheckMenuItem(groupsPane.getToggleAction(), sidePane.getToggleCommandFor(groupsPane), sidePane.paneVisibleBinding(groupsPane)),
                 factory.createCheckMenuItem(openOfficePane.getToggleAction(), sidePane.getToggleCommandFor(openOfficePane), sidePane.paneVisibleBinding(openOfficePane)),
+                factory.createCheckMenuItem(coverImagePane.getToggleAction(), sidePane.getToggleCommandFor(coverImagePane), sidePane.paneVisibleBinding(coverImagePane)), // A5 test
 
                 new SeparatorMenuItem(),
 

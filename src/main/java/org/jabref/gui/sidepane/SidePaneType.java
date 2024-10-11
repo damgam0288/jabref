@@ -12,7 +12,8 @@ import org.jabref.logic.l10n.Localization;
 public enum SidePaneType {
     OPEN_OFFICE("OpenOffice/LibreOffice", IconTheme.JabRefIcons.FILE_OPENOFFICE, StandardActions.TOGGLE_OO),
     WEB_SEARCH(Localization.lang("Web search"), IconTheme.JabRefIcons.WWW, StandardActions.TOGGLE_WEB_SEARCH),
-    GROUPS(Localization.lang("Groups"), IconTheme.JabRefIcons.TOGGLE_GROUPS, StandardActions.TOGGLE_GROUPS);
+    GROUPS(Localization.lang("Groups"), IconTheme.JabRefIcons.TOGGLE_GROUPS, StandardActions.TOGGLE_GROUPS),
+    COVER_IMAGE(Localization.lang("Cover Image"), IconTheme.JabRefIcons.WWW, StandardActions.TOGGLE_WEB_SEARCH); // A5 test
 
     private final String title;
     private final JabRefIcon icon;

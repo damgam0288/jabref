@@ -80,6 +80,7 @@ public class SidePaneViewModel extends AbstractViewModel {
     }
 
     protected SidePaneComponent getSidePaneComponent(SidePaneType pane) {
+        System.out.println("org.jabref.gui.sidepane.SidePaneViewModel.getSidePaneComponent");
         SidePaneComponent sidePaneComponent = sidePaneComponentLookup.get(pane);
         if (sidePaneComponent == null) {
             sidePaneComponent = switch (pane) {
@@ -90,13 +91,14 @@ public class SidePaneViewModel extends AbstractViewModel {
                         sidePaneContentFactory,
                         preferences.getGroupsPreferences(),
                         dialogService);
-                case WEB_SEARCH, OPEN_OFFICE -> new SidePaneComponent(pane,
+                case WEB_SEARCH, OPEN_OFFICE, COVER_IMAGE -> new SidePaneComponent(pane,
                         new ClosePaneAction(pane),
                         new MoveUpAction(pane),
                         new MoveDownAction(pane),
                         sidePaneContentFactory);
+                // Todo A5 test - create a new SidePaneType here
             };
-            sidePaneComponentLookup.put(pane, sidePaneComponent);
+            sidePaneComponentLookup.put(pane, sidePaneComponent);           // Todo A5 test - put the new SidePaneComponent here
         }
         return sidePaneComponent;
     }
