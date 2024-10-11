@@ -86,7 +86,10 @@ public class SidePaneContentFactory {
                     dialogService,
                     stateManager);
             // Todo A5 test - consider adding an enum for "cover pane" and put it here?
-            case COVER_IMAGE -> new Label("This is a blue label");
+            case COVER_IMAGE -> new Label("testing label");
+            // A5 test - maybe we can register a listener to the CoverImage object; and the parameter is the BibEntry.
+            // Specifically, the method will take the BibEntry and update the image of the CoverImage
+
         };
     }
 }

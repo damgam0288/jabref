@@ -80,7 +80,6 @@ public class SidePaneViewModel extends AbstractViewModel {
     }
 
     protected SidePaneComponent getSidePaneComponent(SidePaneType pane) {
-        System.out.println("org.jabref.gui.sidepane.SidePaneViewModel.getSidePaneComponent");
         SidePaneComponent sidePaneComponent = sidePaneComponentLookup.get(pane);
         if (sidePaneComponent == null) {
             sidePaneComponent = switch (pane) {

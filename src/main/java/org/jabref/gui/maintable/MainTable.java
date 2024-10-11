@@ -43,6 +43,7 @@ import org.jabref.gui.maintable.columns.MainTableColumn;
 import org.jabref.gui.preferences.GuiPreferences;
 import org.jabref.gui.preview.ClipboardContentGenerator;
 import org.jabref.gui.search.MatchCategory;
+import org.jabref.gui.sidepane.SidePane;
 import org.jabref.gui.sidepane.SidePaneType;
 import org.jabref.gui.util.ControlHelper;
 import org.jabref.gui.util.CustomLocalDragboard;
@@ -131,13 +132,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         this.getColumns().removeIf(LibraryColumn.class::isInstance);
 
         new ViewModelTableRowFactory<BibEntryTableViewModel>()
-                .withOnMouseClickedEvent((entry, event) -> {        // A5 test - important
-                    if (event.getClickCount() == 1) {
-                        // get the side pane Cover Image component
-                        // give it the Entry
-                        // and then tell it to update the image using that entry
-
-                    }
+                .withOnMouseClickedEvent((entry, event) -> {        // A5 test
                     if (event.getClickCount() == 2) {
                         libraryTab.showAndEdit(entry.getEntry());
                     }
