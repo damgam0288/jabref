@@ -14,6 +14,8 @@ import java.util.Map;
 import org.jabref.cli.ArgumentProcessor;
 import org.jabref.cli.JabRefCLI;
 import org.jabref.gui.JabRefGUI;
+import org.jabref.gui.a5experiments.DummyObject;
+import org.jabref.gui.a5experiments.Listener;
 import org.jabref.gui.preferences.GuiPreferences;
 import org.jabref.gui.preferences.JabRefGuiPreferences;
 import org.jabref.gui.util.DefaultDirectoryMonitor;
@@ -35,10 +37,12 @@ import org.jabref.logic.util.Directories;
 import org.jabref.logic.util.HeadlessExecutorService;
 import org.jabref.migrations.PreferencesMigrations;
 import org.jabref.model.entry.BibEntryTypesManager;
+import org.jabref.model.entry.event.EntryChangedEvent;
 import org.jabref.model.util.DirectoryMonitor;
 import org.jabref.model.util.FileUpdateMonitor;
 
 import com.airhacks.afterburner.injection.Injector;
+import com.google.common.eventbus.EventBus;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +61,13 @@ public class Launcher {
 
     public static void main(String[] args) {
         initLogging(args);
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        EventBus eventBus = new EventBus();
+
+        Listener listener = new Listener();
+        eventBus.register(listener);
+        eventBus.post(new DummyObject(198)); // 1 represents the passed event
 
         try {
             Injector.setModelOrService(BuildInfo.class, new BuildInfo());

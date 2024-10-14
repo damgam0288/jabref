@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.swing.undo.UndoManager;
 
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
 import javafx.scene.control.SelectionMode;
@@ -45,6 +46,7 @@ import org.jabref.gui.preferences.GuiPreferences;
 import org.jabref.gui.preview.ClipboardContentGenerator;
 import org.jabref.gui.search.MatchCategory;
 import org.jabref.gui.sidepane.SidePane;
+import org.jabref.gui.sidepane.SidePaneComponent;
 import org.jabref.gui.sidepane.SidePaneType;
 import org.jabref.gui.util.ControlHelper;
 import org.jabref.gui.util.CustomLocalDragboard;
@@ -58,8 +60,10 @@ import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.database.event.EntriesAddedEvent;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.entry.BibEntryTypesManager;
+import org.jabref.model.entry.event.EntryChangedEvent;
 
 import com.airhacks.afterburner.injection.Injector;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +91,8 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
     private long lastKeyPressTime;
     private String columnSearchTerm;
 
+    private final EventBus eventBus = new EventBus(); // A5 test
+
     public MainTable(MainTableDataModel model,
                      LibraryTab libraryTab,
                      LibraryTabContainer tabContainer,
@@ -111,6 +117,9 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         this.importHandler = importHandler;
         this.clipboardContentGenerator = new ClipboardContentGenerator(preferences.getPreviewPreferences(), preferences.getLayoutFormatterPreferences(), Injector.instantiateModelOrService(JournalAbbreviationRepository.class));
 
+        // A5 test
+        this.eventBus.register(this);
+
         MainTablePreferences mainTablePreferences = preferences.getMainTablePreferences();
 
         localDragboard = stateManager.getLocalDragboard();
@@ -133,15 +142,14 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         this.getColumns().removeIf(LibraryColumn.class::isInstance);
 
         new ViewModelTableRowFactory<BibEntryTableViewModel>()
-                .withOnMouseClickedEvent((entry, event) -> {        // A5 test
+                .withOnMouseClickedEvent((entry, event) -> {
+
+                    // A5 test
                     if (event.getClickCount() == 1) {
-                        // A5 test - with stateManager.getSelectedEntries.addListener
-                        // you could add a listener to update the visibleSidePanes whenever
-                        // the selectedEntries change
                         BibEntry selectedEntry = (stateManager.getSelectedEntries().getFirst());
-
-
+                        eventBus.post(selectedEntry);
                     }
+
                     if (event.getClickCount() == 2) {
                         libraryTab.showAndEdit(entry.getEntry());
                     }
@@ -216,7 +224,11 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
 
         // Enable the header right-click menu.
         new MainTableHeaderContextMenu(this, mainTableColumnFactory, tabContainer, dialogService).show(true);
+
+
     }
+
+
 
     /**
      * This is called, if a user starts typing some characters into the keyboard with focus on main table. The {@link MainTable} will scroll to the cell with the same starting column value and typed string

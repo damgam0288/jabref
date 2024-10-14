@@ -3,12 +3,12 @@ package org.jabref.gui.sidepane;
 import javax.swing.undo.UndoManager;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 
 import org.jabref.gui.ClipBoardManager;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.LibraryTabContainer;
 import org.jabref.gui.StateManager;
+import org.jabref.gui.a5experiments.CoverImagePane;
 import org.jabref.gui.groups.GroupTreeView;
 import org.jabref.gui.importer.fetcher.WebSearchPaneView;
 import org.jabref.gui.openoffice.OpenOfficePanel;
@@ -85,10 +85,8 @@ public class SidePaneContentFactory {
                     preferences,
                     dialogService,
                     stateManager);
-            // Todo A5 test - consider adding an enum for "cover pane" and put it here?
-            case COVER_IMAGE -> new Label("testing label");
-            // A5 test - maybe we can register a listener to the CoverImage object; and the parameter is the BibEntry.
-            // Specifically, the method will take the BibEntry and update the image of the CoverImage
+            // Todo A5 test
+            case COVER_IMAGE -> new CoverImagePane();
 
         };
     }
