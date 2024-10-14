@@ -28,12 +28,17 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import org.jabref.gui.actions.StandardActions;
@@ -116,7 +121,7 @@ public class LibraryTab extends Tab {
     /**
      * Defines the different modes that the tab can operate in
      */
-    private enum PanelMode { MAIN_TABLE, MAIN_TABLE_AND_ENTRY_EDITOR }
+    private enum PanelMode { MAIN_TABLE, MAIN_TABLE_AND_ENTRY_EDITOR }      // A5 tests - might have to add a mode if you are using a separate side pane to show the book cover
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LibraryTab.class);
     private final LibraryTabContainer tabContainer;
@@ -136,6 +141,11 @@ public class LibraryTab extends Tab {
     private MainTable mainTable;
     private PanelMode mode = PanelMode.MAIN_TABLE;
     private SplitPane splitPane;
+    private SplitPane subSplitPane; // A5 tests
+
+    //A5 tests
+    private StackPane bookCover;
+
     private DatabaseNotification databaseNotificationPane;
 
     // Indicates whether the tab is loading data using a dataloading task
@@ -515,10 +525,16 @@ public class LibraryTab extends Tab {
     public void setupMainPanel() {
         splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
+        subSplitPane = new SplitPane();
+        subSplitPane.setOrientation(Orientation.HORIZONTAL);
+        bookCover = new StackPane();
 
         createMainTable();
 
-        splitPane.getItems().add(mainTable);
+        subSplitPane.getItems().addAll(mainTable,bookCover);
+
+        splitPane.getItems().add(subSplitPane);
+
         databaseNotificationPane = new DatabaseNotification(splitPane);
         setContent(databaseNotificationPane);
 
@@ -572,7 +588,7 @@ public class LibraryTab extends Tab {
      *
      * @param entry The entry to edit.
      */
-    public void showAndEdit(BibEntry entry) {
+    public void showAndEdit(BibEntry entry) {           // A5 tests - important - this shows/hides the entry editor
         if (!splitPane.getItems().contains(entryEditor)) {
             splitPane.getItems().addLast(entryEditor);
             mode = PanelMode.MAIN_TABLE_AND_ENTRY_EDITOR;
@@ -582,6 +598,7 @@ public class LibraryTab extends Tab {
         // We use != instead of equals because of performance reasons
         if (entry != showing) {
             entryEditor.setCurrentlyEditedEntry(entry);
+            bookCover.getChildren().add(new ImageView(entry.getCoverImage()));
             showing = entry;
         }
         entryEditor.requestFocus();
