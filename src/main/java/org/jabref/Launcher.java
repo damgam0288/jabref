@@ -62,13 +62,6 @@ public class Launcher {
     public static void main(String[] args) {
         initLogging(args);
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        EventBus eventBus = new EventBus();
-
-        Listener listener = new Listener();
-        eventBus.register(listener);
-        eventBus.post(new DummyObject(198)); // 1 represents the passed event
-
         try {
             Injector.setModelOrService(BuildInfo.class, new BuildInfo());
 

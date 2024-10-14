@@ -6,15 +6,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import org.jabref.gui.DialogService;
 import org.jabref.gui.externalfiles.ExternalFilesEntryLinker;
@@ -104,7 +112,15 @@ public class PreviewPanel extends VBox {
             event.setDropCompleted(success);
             event.consume();
         });
-        this.getChildren().add(previewView);
+
+        // A5 tests
+        HBox contentBox = new HBox();
+
+        Label bookCover = new Label("BOOK COVER");
+
+        contentBox.getChildren().addAll(previewView, bookCover);
+
+        this.getChildren().add(contentBox);
 
         createKeyBindings();
         previewView.setLayout(previewPreferences.getSelectedPreviewLayout());
