@@ -11,6 +11,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -50,6 +51,7 @@ public class PreviewPanel extends VBox {
     private final ExternalFilesEntryLinker fileLinker;
     private final KeyBindingRepository keyBindingRepository;
     private final PreviewViewer previewView;
+    private ImageView bookCover;
     private final PreviewPreferences previewPreferences;
     private final DialogService dialogService;
     private BibEntry entry;
@@ -116,9 +118,11 @@ public class PreviewPanel extends VBox {
         // A5 tests
         HBox contentBox = new HBox();
 
-        Label bookCover = new Label("BOOK COVER");
+        bookCover = new ImageView();
 
         contentBox.getChildren().addAll(previewView, bookCover);
+
+//        this.getChildren().add(previewView);
 
         this.getChildren().add(contentBox);
 
@@ -167,6 +171,7 @@ public class PreviewPanel extends VBox {
         this.entry = entry;
         previewView.setEntry(entry);
         previewView.setLayout(previewPreferences.getSelectedPreviewLayout());
+        bookCover.setImage(entry.getCoverImage());      // A5 test
     }
 
     public void print() {
