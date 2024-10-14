@@ -131,13 +131,7 @@ public class MainTable extends TableView<BibEntryTableViewModel> {
         this.getColumns().removeIf(LibraryColumn.class::isInstance);
 
         new ViewModelTableRowFactory<BibEntryTableViewModel>()
-                .withOnMouseClickedEvent((entry, event) -> {        // A5 test - important
-                    if (event.getClickCount() == 1) {
-                        // get the side pane Cover Image component
-                        // give it the Entry
-                        // and then tell it to update the image using that entry
-
-                    }
+                .withOnMouseClickedEvent((entry, event) -> {
                     if (event.getClickCount() == 2) {
                         libraryTab.showAndEdit(entry.getEntry());
                     }
