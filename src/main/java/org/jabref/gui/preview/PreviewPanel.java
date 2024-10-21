@@ -9,11 +9,17 @@ import java.util.stream.Collectors;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 
 import org.jabref.gui.DialogService;
@@ -148,9 +154,29 @@ public class PreviewPanel extends VBox {
     }
 
     public void setEntry(BibEntry entry) {
+        // TODO CONTINUE HERE
+        System.out.println("org.jabref.gui.preview.PreviewPanel.setEntry");
         this.entry = entry;
         previewView.setEntry(entry);
         previewView.setLayout(previewPreferences.getSelectedPreviewLayout());
+
+        Image coverImage = entry.getCoverImage(); // Assuming this returns a JavaFX Image object
+
+        if (coverImage != null) {
+            BackgroundImage backgroundImage = new BackgroundImage(
+                    coverImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(
+                            BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false
+                    )
+            );
+
+            this.setBackground(new Background(backgroundImage));
+        } else {
+            this.setBackground(null); // Clear the background if no image is available
+        }
     }
 
     public void print() {

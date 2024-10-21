@@ -24,6 +24,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.scene.image.Image;
 
 import org.jabref.architecture.AllowedToUseLogic;
 import org.jabref.logic.bibtex.FileFieldWriter;
@@ -379,6 +380,13 @@ public class BibEntry implements Cloneable {
         eventBus.post(new FieldChangedEvent(this, InternalField.INTERNAL_ID_FIELD, id, oldId));
         this.id = id;
         changed = true;
+    }
+
+    /**
+     * TESTING A5
+     */
+    public Image getCoverImage() {
+        return new Image("file:///C:/Users/Damian/Downloads/bookcover1.jpeg");
     }
 
     /**
