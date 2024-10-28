@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -20,6 +25,10 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import org.jabref.gui.DialogService;
@@ -38,10 +47,11 @@ import org.jabref.model.database.BibDatabaseContext;
 import org.jabref.model.entry.BibEntry;
 import org.jabref.model.search.SearchQuery;
 
+import com.tobiasdiez.easybind.EasyBind;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PreviewPanel extends VBox {
+public class PreviewPanel extends HBox {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PreviewPanel.class);
 
@@ -50,6 +60,7 @@ public class PreviewPanel extends VBox {
     private final PreviewViewer previewView;
     private final PreviewPreferences previewPreferences;
     private final DialogService dialogService;
+    private StackPane bookCover;
     private BibEntry entry;
 
     public PreviewPanel(BibDatabaseContext database,
@@ -64,6 +75,7 @@ public class PreviewPanel extends VBox {
         this.dialogService = dialogService;
         this.previewPreferences = preferences.getPreviewPreferences();
         this.fileLinker = new ExternalFilesEntryLinker(preferences.getExternalApplicationsPreferences(), preferences.getFilePreferences(), database, dialogService);
+        this.bookCover = new StackPane();
 
         PreviewPreferences previewPreferences = preferences.getPreviewPreferences();
         previewView = new PreviewViewer(database, dialogService, preferences, themeManager, taskExecutor, searchQueryProperty);
@@ -110,10 +122,14 @@ public class PreviewPanel extends VBox {
             event.setDropCompleted(success);
             event.consume();
         });
-        this.getChildren().add(previewView);
+
+        this.getChildren().addFirst(previewView);
+        HBox.setHgrow(previewView,Priority.ALWAYS);
+        this.getChildren().addLast(bookCover);
 
         createKeyBindings();
         previewView.setLayout(previewPreferences.getSelectedPreviewLayout());
+
     }
 
     private void createKeyBindings() {
@@ -157,26 +173,33 @@ public class PreviewPanel extends VBox {
         // TODO CONTINUE HERE
         System.out.println("org.jabref.gui.preview.PreviewPanel.setEntry");
         this.entry = entry;
+        setBookCover(entry);
+
         previewView.setEntry(entry);
         previewView.setLayout(previewPreferences.getSelectedPreviewLayout());
+    }
 
-        Image coverImage = entry.getCoverImage(); // Assuming this returns a JavaFX Image object
+    // A5 tests
+    private void setBookCover(BibEntry entry) {
+        // Clear previous content to avoid adding multiple images
+        this.bookCover.getChildren().clear();
 
-        if (coverImage != null) {
-            BackgroundImage backgroundImage = new BackgroundImage(
-                    coverImage,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER,
-                    new BackgroundSize(
-                            BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false
-                    )
-            );
+        // TODO CONTINUE HERE - make the image view just a fixed size, and
+        //  maybe make it centered
+        ImageView imageView = new ImageView();
+        imageView.setPreserveRatio(true);
+        imageView.setImage(entry.getCoverImage());
 
-            this.setBackground(new Background(backgroundImage));
-        } else {
-            this.setBackground(null); // Clear the background if no image is available
-        }
+        // Bind the imageView's height to the bookCover's height to ensure it resizes properly
+        imageView.fitHeightProperty().bind(this.heightProperty());
+        imageView.fitWidthProperty().bind(this.widthProperty());
+
+        // Ensure the ImageView resizes when the HBox shrinks
+        imageView.setSmooth(true);
+
+        // Add the imageView to the bookCover StackPane and set its alignment
+        this.bookCover.getChildren().add(imageView);
+        this.bookCover.setAlignment(Pos.BASELINE_CENTER);
     }
 
     public void print() {
